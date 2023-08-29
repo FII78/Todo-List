@@ -6,22 +6,41 @@ from datetime import datetime
 from pymongo import MongoClient # pip install pymongo[srv]
 from bson.objectid import ObjectId # pip install bson
 import certifi
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 ### Initializing Configuration
 print("Initializing configuration...")
-config = configparser.ConfigParser()
-config.read('config.ini')
+# config = configparser.ConfigParser()
+# config.read('config.ini')
 
-# Read values for Telethon and set session name
-API_ID = config.get('default','api_id') 
-API_HASH = config.get('default','api_hash')
-BOT_TOKEN = config.get('default','bot_token')
+
+
+# Read environment variables
+API_ID = os.environ.get("API_ID")
+API_HASH = os.environ.get("API_HASH")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+USERNAME = os.environ.get("USERNAME")
+PASSWORD = os.environ.get("PASSWORD")
+DATABASE_NAME = os.environ.get("DATABASE_NAME")
+COLLECTION_NAME = os.environ.get("COLLECTION_NAME")
 session_name = "sessions/Bot"
 
-# Read values for Mongodb
-USERNAME = config.get('default', 'username')
-PASSWORD = config.get('default', 'password')
-DATABASE_NAME = config.get('default', "db_name")
-COLLECTION_NAME = config.get('default', "collection_name")
+print(API_ID,API_HASH)
+
+# # Read values for Telethon and set session name
+# API_ID = config.get('default','api_id') 
+# API_HASH = config.get('default','api_hash')
+# BOT_TOKEN = config.get('default','bot_token')
+
+
+# # Read values for Mongodb
+# USERNAME = config.get('default', 'username')
+# PASSWORD = config.get('default', 'password')
+# DATABASE_NAME = config.get('default', "db_name")
+# COLLECTION_NAME = config.get('default', "collection_name")
 
 # Start the Client (telethon)
 client = TelegramClient(session_name, API_ID, API_HASH).start(bot_token=BOT_TOKEN)
@@ -41,16 +60,7 @@ async def start(event):
     SENDER = sender.id
 
     # send notification message
-    text = """Hello there! Let's plan your day ahead 
-    If you're new here, check out this tips to seemlessly use this bot: 
-        1. To add a task simply type /insert [ Your task description] [D - if your task is Done | N - if you're Not done with the Task]
-        2. To see all of your tasks type /select
-        3. To update your task:
-            -> First get the id of the task you want to update using the /select command
-            -> Then type /update [The id of the task] [ Your task description] [D - if your task is Done | N - if you're Not done with the Task]
-        4. To delete your task:
-            -> First get the id of the task you want to update using the /select command
-            -> Then type /delete [The id of the task you want to delete]"""
+    text = "Hello there! Let's plan your day ahead /n If you're new here, check out this tips to seemlessly use this bot: To add a task simple type /insert [ Your task description] [D - if your task is Done | N - if you're Not done with the Task]"
     await client.send_message(SENDER, text)
 
 
